@@ -1,0 +1,1 @@
+export const getUsuario=(req,res)=>res.send('boteniendo usuarios')
