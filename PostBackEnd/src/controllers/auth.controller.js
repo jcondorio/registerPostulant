@@ -1,0 +1,45 @@
+
+import {pool} from '../database.js'
+import jwt from 'jsonwebtoken'
+import express from 'express'
+import bcrypt from 'bcrypt'
+export const authController= async(req,res)=>{
+    try {
+        console.log(req.body)
+        const psw= await bcrypt.hash(req.body.clave,8);
+        const data=await pool.query('insert into Usuario(IdTipoUsu,Usuario,Password) values(?,?,?)',[req.body.id,req.body.nombre,psw]);
+        res.json({
+            mesaje:data
+        })
+    } catch (error) {
+        return res.send(error);
+        /*return res.status(500).json({
+            messaje:'joder salio mal'
+        })*/
+    }
+}
+
+export const loginController=async(req,res)=>{
+    try {
+        console.log(req.body.clave)
+        const [data]=await pool.query('select * from Usuario where Usuario=?',[req.body.nombre]);
+        console.log(data[0].Password)
+        const compare=bcrypt.compareSync(req.body.clave,data[0].Password)
+        console.log("compare: ",compare)
+    
+    const user= {
+        id:data.IdTipoUsu,
+        nombre:data.Usuario,
+        clave:data.Password
+    }
+    console.log(user)
+    jwt.sign({user},'secretkey',{expiresIn:'20m'},(err,token)=>{
+        res.json({
+            token
+        })
+    })
+    } catch (error) {
+        return res.send(error)
+    }
+    
+}
