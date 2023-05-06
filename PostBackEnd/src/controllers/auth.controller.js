@@ -5,7 +5,7 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 export const authController= async(req,res)=>{
     try {
-        console.log(req.body)
+        //console.log(req.body)
         const psw= await bcrypt.hash(req.body.clave,8);
         const data=await pool.query('insert into Usuario(IdTipoUsu,Usuario,Password) values(?,?,?)',[req.body.id,req.body.nombre,psw]);
         res.json({
@@ -28,9 +28,9 @@ export const loginController=async(req,res)=>{
         console.log("compare: ",compare)
     
     const user= {
-        id:data.IdTipoUsu,
-        nombre:data.Usuario,
-        clave:data.Password
+        id:data[0].IdTipoUsu,
+        nombre:data[0].Usuario,
+        clave:data[0].Password
     }
     console.log(user)
     jwt.sign({user},'secretkey',{expiresIn:'20m'},(err,token)=>{

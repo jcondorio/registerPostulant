@@ -9,7 +9,19 @@ export const verifyToken=async(req,res,next)=>{
             
             req.token=bearerToken;
             next();
-            console.log("en verify: ",bearerToken)
+            jwt.verify(req.token,'secretkey',(error,authData)=>{
+                if(error){
+                    res.sendStatus(403);
+                }
+                /*else{
+                    res.json({
+                        
+                        mesaje:"pasamos todos los filtros",
+                        authData:authData
+                    })
+                }*/
+            })
+            //console.log("en verify: ",bearerToken)
             //console.log(authData);
         }
         else{
