@@ -4,8 +4,10 @@ import jwt from 'jsonwebtoken'
 import express from 'express'
 export const usersController= async(req,res)=>{
     try {
-        console.log(req.body)
-        const [rows]=await pool.query('select * from Usuario where Usuario=?',[req.body.usuario])
+        console.log("dsdddadas",req.body)
+        //const [rows]=await pool.query('select * from Usuario where Usuario=?',[req.body.usuario]);
+        const [rows]=await pool.query('select * from Usuario');
+        console.log("aver",rows)
         res.send(rows);
     } catch (error) {
         return res.status(500)
@@ -15,7 +17,7 @@ export const usersController= async(req,res)=>{
 export const userController= async(req,res)=>{
     try {
         //console.log(req.body)
-        const [rows]=await pool.query('select * from Usuario')
+        const [rows]=await pool.query('select * from Usuario where Usuario=?',[req.body.usuario]);
         res.send(rows);
     } catch (error) {
         return res.status(500)

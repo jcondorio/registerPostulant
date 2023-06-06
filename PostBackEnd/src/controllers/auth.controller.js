@@ -38,6 +38,20 @@ export const loginController=async(req,res)=>{
             token
         })
     })
+    const cookiesOptions = {
+        expires: new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
+        httpOnly: true
+   }
+   res.cookie('jwt', token, cookiesOptions)
+   res.render('login', {
+        alert: true,
+        alertTitle: "Conexión exitosa",
+        alertMessage: "¡LOGIN CORRECTO!",
+        alertIcon:'success',
+        showConfirmButton: false,
+        timer: 800,
+        ruta: ''
+   })
     } catch (error) {
         return res.send(error)
     }
